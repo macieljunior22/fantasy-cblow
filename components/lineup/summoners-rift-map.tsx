@@ -13,8 +13,8 @@ export const MAP_SLOTS: Record<Rota, { x: number; y: number }> = {
   TOP: { x: 18, y: 20 },
   JG: { x: 33, y: 40 },
   MID: { x: 50, y: 47 },
-  ADC: { x: 56, y: 87 },
-  SUP: { x: 82, y: 86 },
+  ADC: { x: 70, y: 80 },
+  SUP: { x: 86, y: 90 },
 };
 
 /** Posição da bolinha do TÉCNICO: base inferior (onde começam os jogadores). */
