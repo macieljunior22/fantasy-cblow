@@ -83,6 +83,16 @@ export function AdminControls({
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          <select
+            value={newType}
+            onChange={(e) => setNewType(e.target.value as "TREINO" | "OFICIAL")}
+            disabled={pending}
+            className="input"
+            title="TREINO calibra preco sem pontuar; OFICIAL pontua"
+          >
+            <option value="OFICIAL">OFICIAL</option>
+            <option value="TREINO">TREINO</option>
+          </select>
           <button
             type="button"
             disabled={pending}
@@ -180,16 +190,6 @@ export function AdminControls({
               });
             }}
             className="btn-primary"
-          <select
-            value={newType}
-            onChange={(e) => setNewType(e.target.value as "TREINO" | "OFICIAL")}
-            disabled={pending}
-            className="input"
-            title="TREINO calibra preco sem pontuar; OFICIAL pontua"
-          >
-            <option value="OFICIAL">OFICIAL</option>
-            <option value="TREINO">TREINO</option>
-          </select>
           >
             Criar partida
           </button>
