@@ -2,8 +2,19 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  Coins,
+  Crosshair,
+  Crown,
+  ShieldPlus,
+  Sparkles,
+  Swords,
+  Trees,
+  Zap,
+} from "lucide-react";
 
 import { CoachMarketCard, PlayerMarketCard } from "@/components/market/market-cards";
+import { MAP_SLOTS, SummonersRiftMap } from "@/components/lineup/summoners-rift-map";
 import { deleteLineup, saveLineup } from "@/lib/actions/lineup";
 import { cn } from "@/lib/utils";
 import type { Coach, Lineup, PlayerCblow, Rota } from "@/types/database";
@@ -15,6 +26,16 @@ const SLOTS: { rota: Rota; label: string }[] = [
   { rota: "ADC", label: "Atirador" },
   { rota: "SUP", label: "Suporte" },
 ];
+
+const ROTA_ICON: Record<Rota, typeof Swords> = {
+  TOP: Swords,
+  JG: Trees,
+  MID: Zap,
+  ADC: Crosshair,
+  SUP: ShieldPlus,
+};
+
+type Active = Rota | "TEC";
 
 export function LineupBuilder({
   players,
@@ -32,7 +53,7 @@ export function LineupBuilder({
   existing: Lineup | null;
 }) {
   const router = useRouter();
-  const [active, setActive] = useState<Rota | "TEC">("TOP");
+  const [active, setActive] = useState<Active>("TOP");
   const [picks, setPicks] = useState<Record<Rota, string | null>>({
     TOP: existing?.top_id ?? null,
     JG: existing?.jg_id ?? null,
@@ -43,6 +64,7 @@ export function LineupBuilder({
   const [coachId, setCoachId] = useState<string | null>(existing?.coach_id ?? null);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [dragOver, setDragOver] = useState<Rota | null>(null);
 
   const playerById = useMemo(() => new Map(players.map((p) => [p.id, p])), [players]);
   const coachById = useMemo(() => new Map(coaches.map((c) => [c.id, c])), [coaches]);
@@ -67,9 +89,6 @@ export function LineupBuilder({
   function pickCoach(c: Coach) {
     setMessage(null);
     setCoachId(c.id);
-  }
-  function clearSlot(rota: Rota) {
-    setPicks((prev) => ({ ...prev, [rota]: null }));
   }
 
   async function onSave() {
@@ -106,108 +125,258 @@ export function LineupBuilder({
     router.refresh();
   }
 
-  const available = players.filter((p) =>
+  // Jogadores da rota ativa que ainda cabem no orçamento (considerando quem já
+  // está na própria lane, para poder trocar sem travar no preço).
+  const activeSlotBudget =
     active === "TEC"
-      ? false
-      : p.rota === active &&
-        p.preco <= remaining + (picks[active] ? playerById.get(picks[active]!)?.preco ?? 0 : 0),
+      ? remaining
+      : remaining + (picks[active] ? playerById.get(picks[active]!)?.preco ?? 0 : 0);
+  const available = players.filter(
+    (p) => active !== "TEC" && p.rota === active && p.preco <= activeSlotBudget,
   );
 
+  const activeCoach = coachId ? coachById.get(coachId) : undefined;
+  const activeLabel = SLOTS.find((s) => s.rota === active)?.label;
   return (
-    <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-      <aside className="flex flex-col gap-4">
-        <div className="panel">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-bold">Seu time</h2>
-            <span className={cn("font-mono font-bold", remaining < 0 ? "text-red-400" : "text-gold")}>
-              {remaining} LOW
+    <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
+      {/* ===================== MAPA ===================== */}
+      <div className="order-2 lg:order-1">
+        <SummonersRiftMap>
+          {SLOTS.map(({ rota }) => {
+            const pos = MAP_SLOTS[rota];
+            const pickedId = picks[rota];
+            const picked = pickedId ? playerById.get(pickedId) : undefined;
+            const Icon = ROTA_ICON[rota];
+            const isActive = active === rota;
+            return (
+              <button
+                key={rota}
+                type="button"
+                disabled={!marketOpen}
+                onClick={() => setActive(rota)}
+                onDragOver={(e) => {
+                  if (!marketOpen) return;
+                  e.preventDefault();
+                  setDragOver(rota);
+                }}
+                onDragLeave={() => setDragOver((cur) => (cur === rota ? null : cur))}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setDragOver(null);
+                  if (!marketOpen) return;
+                  const id = e.dataTransfer.getData("text/player-id");
+                  const p = id ? playerById.get(id) : undefined;
+                  if (p && p.rota === rota) pickPlayer(p);
+                }}
+                style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                className="group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center disabled:cursor-not-allowed"
+                title={picked ? `${picked.nick} — toque para trocar` : `Escolher ${rota}`}
+              >
+                <span
+                  className={cn(
+                    "relative flex h-14 w-14 items-center justify-center rounded-full border-2 backdrop-blur-sm transition-all sm:h-16 sm:w-16",
+                    isActive
+                      ? "border-gold bg-gold/25 shadow-[0_0_18px_-2px_rgba(216,189,142,0.75)]"
+                      : "border-line bg-black/50 group-hover:border-gold/60",
+                    dragOver === rota && "scale-110 border-live bg-live/20",
+                    !picked && !isActive && "opacity-80",
+                  )}
+                >
+                  {picked?.foto_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={picked.foto_url}
+                      alt={picked.nick}
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  ) : picked ? (
+                    <span className="text-sm font-bold text-gold">
+                      {picked.nick.slice(0, 2).toUpperCase()}
+                    </span>
+                  ) : (
+                    <Icon className="h-6 w-6 text-gold/80" />
+                  )}
+                </span>
+                <span
+                  className={cn(
+                    "mt-1 max-w-[5.5rem] truncate rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-semibold",
+                    isActive ? "text-gold" : "text-foreground/80",
+                  )}
+                >
+                  {picked ? picked.nick : rota}
+                </span>
+              </button>
+            );
+          })}
+
+          {/* Técnico no canto inferior esquerdo */}
+          <button
+            type="button"
+            disabled={!marketOpen}
+            onClick={() => setActive("TEC")}
+            onDrop={(e) => {
+              e.preventDefault();
+              if (!marketOpen) return;
+              const id = e.dataTransfer.getData("text/coach-id");
+              const c = id ? coachById.get(id) : undefined;
+              if (c) pickCoach(c);
+            }}
+            onDragOver={(e) => {
+              if (marketOpen) e.preventDefault();
+            }}
+            style={{ left: "9%", top: "90%" }}
+            className="group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center disabled:cursor-not-allowed"
+            title={activeCoach ? `${activeCoach.nome} — toque para trocar` : "Escolher Técnico"}
+          >
+            <span
+              className={cn(
+                "relative flex h-14 w-14 items-center justify-center rounded-full border-2 backdrop-blur-sm transition-all sm:h-16 sm:w-16",
+                active === "TEC"
+                  ? "border-gold bg-gold/25 shadow-[0_0_18px_-2px_rgba(216,189,142,0.75)]"
+                  : "border-line bg-black/50 group-hover:border-gold/60",
+              )}
+            >
+              <Crown className="h-6 w-6 text-gold/80" />
             </span>
-          </div>
-          <ul className="flex flex-col gap-1.5">
-            {SLOTS.map(({ rota, label }) => {
-              const id = picks[rota];
-              const p = id ? playerById.get(id) : null;
-              return (
-                <li key={rota} className={cn("flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm", p ? "border-gold/40 bg-surface-2" : "border-line")}>
+            <span
+              className={cn(
+                "mt-1 max-w-[6rem] truncate rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-semibold",
+                active === "TEC" ? "text-gold" : "text-foreground/80",
+              )}
+            >
+              {activeCoach ? activeCoach.nome : "Técnico"}
+            </span>
+          </button>
+        </SummonersRiftMap>
+
+        <p className="mt-3 text-center text-xs text-muted">
+          {marketOpen
+            ? "Toque numa lane no mapa para escolher, ou arraste um card da lista até a lane."
+            : "O mercado está fechado — escalações bloqueadas."}
+        </p>
+      </div>
+
+      {/* ===================== PAINEL "SEU TIME" ===================== */}
+      <aside className="panel order-1 flex flex-col lg:order-2">
+        <div className="flex items-center justify-between">
+          <h2 className="font-bold">Seu time</h2>
+          <span
+            className={cn(
+              "flex items-center gap-1 font-mono text-sm font-bold",
+              remaining < 0 ? "text-red-400" : "text-gold",
+            )}
+          >
+            <Coins className="h-4 w-4" />
+            {remaining.toFixed(2)}
+          </span>
+        </div>
+        <p className="mt-0.5 text-xs text-muted">Restante de {budget.toFixed(2)} LOW Coins</p>
+
+        <ul className="mt-4 flex flex-col gap-1.5 border-t border-line pt-3 text-sm">
+          {SLOTS.map(({ rota, label }) => {
+            const pickedId = picks[rota];
+            const picked = pickedId ? playerById.get(pickedId) : undefined;
+            return (
+              <li key={rota}>
+                <button
+                  type="button"
+                  disabled={!marketOpen}
+                  onClick={() => setActive(rota)}
+                  className={cn(
+                    "flex w-full items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left transition-colors disabled:opacity-60",
+                    active === rota
+                      ? "border-gold/60 bg-gold/10"
+                      : "border-line hover:border-gold/40",
+                  )}
+                >
                   <span className="text-xs text-muted">{label}</span>
-                  {p ? (
-                    <button type="button" onClick={() => clearSlot(rota)} className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right" title="Remover">
-                      <span className="truncate font-medium">{p.nick}</span>
-                      <span className="font-mono text-xs text-gold">{p.preco}</span>
-                      <span className="text-muted">×</span>
-                    </button>
+                  {picked ? (
+                    <span className="flex min-w-0 items-center gap-1.5">
+                      <span className="truncate font-medium">{picked.nick}</span>
+                      <span className="font-mono text-xs text-gold">{picked.preco}</span>
+                    </span>
                   ) : (
                     <span className="text-xs text-muted">vazio</span>
                   )}
-                </li>
-              );
-            })}
-            <li className={cn("flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm", coachId ? "border-gold/40 bg-surface-2" : "border-line")}>
-              <span className="text-xs text-muted">Técnico</span>
-              {coachId ? (
-                <button type="button" onClick={() => setCoachId(null)} className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right" title="Remover">
-                  <span className="truncate font-medium">{coachById.get(coachId)?.nome}</span>
-                  <span className="font-mono text-xs text-gold">{coachById.get(coachId)?.preco}</span>
-                  <span className="text-muted">×</span>
                 </button>
+              </li>
+            );
+          })}
+          <li>
+            <button
+              type="button"
+              disabled={!marketOpen}
+              onClick={() => setActive("TEC")}
+              className={cn(
+                "flex w-full items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left transition-colors disabled:opacity-60",
+                active === "TEC"
+                  ? "border-gold/60 bg-gold/10"
+                  : "border-line hover:border-gold/40",
+              )}
+            >
+              <span className="text-xs text-muted">Técnico</span>
+              {activeCoach ? (
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <span className="truncate font-medium">{activeCoach.nome}</span>
+                  <span className="font-mono text-xs text-gold">{activeCoach.preco}</span>
+                </span>
               ) : (
                 <span className="text-xs text-muted">vazio</span>
               )}
-            </li>
-          </ul>
-          <div className="mt-4 flex flex-col gap-2">
-            <button type="button" disabled={!marketOpen || saving} onClick={onSave} className="btn-primary disabled:cursor-not-allowed disabled:opacity-50">
-              {saving ? "Salvando…" : "Salvar escalação"}
             </button>
-            {existing && (
-              <button type="button" disabled={!marketOpen || saving} onClick={onClear} className="btn-ghost disabled:opacity-50">
-                Remover escalação
-              </button>
-            )}
-            {!marketOpen && <p className="text-center text-xs text-warn">O mercado está fechado.</p>}
-            {message && <p className={cn("text-center text-sm", message.ok ? "text-gold" : "text-red-400")}>{message.text}</p>}
-          </div>
-        </div>
-      </aside>
-      <div>
-        <div className="mb-4 flex flex-wrap gap-2">
-          {SLOTS.map(({ rota, label }) => (
-            <button
-              key={rota}
-              type="button"
-              onClick={() => setActive(rota)}
-              disabled={!marketOpen}
-              className={cn(
-                "rounded-full border px-3.5 py-1.5 text-sm transition-colors disabled:opacity-50",
-                active === rota
-                  ? "border-gold bg-gold/15 text-gold"
-                  : "border-line text-muted hover:border-gold/50",
-              )}
-            >
-              {label}
-              {picks[rota] && <span className="ml-1.5 text-gold">●</span>}
-            </button>
-          ))}
+          </li>
+        </ul>
+
+        <div className="mt-4 flex flex-col gap-2">
           <button
             type="button"
-            onClick={() => setActive("TEC")}
-            disabled={!marketOpen}
-            className={cn(
-              "rounded-full border px-3.5 py-1.5 text-sm transition-colors disabled:opacity-50",
-              active === "TEC"
-                ? "border-gold bg-gold/15 text-gold"
-                : "border-line text-muted hover:border-gold/50",
-            )}
+            disabled={!marketOpen || saving}
+            onClick={onSave}
+            className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Técnico
-            {coachId && <span className="ml-1.5 text-gold">●</span>}
+            {saving ? "Salvando…" : "Salvar escalação"}
           </button>
+          {existing && (
+            <button
+              type="button"
+              disabled={!marketOpen || saving}
+              onClick={onClear}
+              className="btn-ghost disabled:opacity-50"
+            >
+              Remover escalação
+            </button>
+          )}
+          {message && (
+            <p
+              className={cn(
+                "text-center text-sm",
+                message.ok ? "text-gold" : "text-red-400",
+              )}
+            >
+              {message.text}
+            </p>
+          )}
+        </div>
+      </aside>
+
+      {/* ===================== LISTA DE OPÇÕES ===================== */}
+      <div className="order-3 lg:col-span-2">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="flex items-center gap-1.5 text-sm font-semibold text-muted">
+            <Sparkles className="h-4 w-4 text-gold" />
+            {active === "TEC" ? "Escolha um Técnico" : `Escolha o ${activeLabel}`}
+          </span>
         </div>
 
         {active === "TEC" ? (
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {coaches.map((c) => (
-              <CoachMarketCard key={c.id} coach={c} selected={coachId === c.id} onSelect={pickCoach} />
+              <CoachMarketCard
+                key={c.id}
+                coach={c}
+                selected={coachId === c.id}
+                onSelect={marketOpen ? pickCoach : undefined}
+              />
             ))}
           </div>
         ) : (
@@ -218,9 +387,15 @@ export function LineupBuilder({
                 player={p}
                 teamTag={p.team_id ? teamTagById[p.team_id] : undefined}
                 selected={picks[p.rota] === p.id}
-                onSelect={pickPlayer}
+                disabled={!marketOpen}
+                onSelect={marketOpen ? pickPlayer : undefined}
               />
             ))}
+            {available.length === 0 && (
+              <p className="text-sm text-muted">
+                Nenhum jogador desta rota cabe no orçamento restante.
+              </p>
+            )}
           </div>
         )}
       </div>

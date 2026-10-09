@@ -30,10 +30,15 @@ export function PlayerMarketCard({
     <button
       type="button"
       disabled={disabled}
+      draggable={interactive && !disabled}
+      onDragStart={(e) => {
+        e.dataTransfer.setData("text/player-id", player.id);
+        e.dataTransfer.effectAllowed = "move";
+      }}
       onClick={interactive ? () => onSelect?.(player) : undefined}
       className={cn(
         "flex items-center gap-3 rounded-xl border bg-surface-2 p-3 text-left transition-all",
-        interactive && !disabled && "hover:border-gold/60 hover:bg-surface",
+        interactive && !disabled && "cursor-grab hover:border-gold/60 hover:bg-surface active:cursor-grabbing",
         selected && "border-gold ring-1 ring-gold",
         !selected && !disabled && "border-line",
         disabled && "cursor-not-allowed opacity-40",
@@ -86,10 +91,15 @@ export function CoachMarketCard({
     <button
       type="button"
       disabled={disabled}
+      draggable={interactive && !disabled}
+      onDragStart={(e) => {
+        e.dataTransfer.setData("text/coach-id", coach.id);
+        e.dataTransfer.effectAllowed = "move";
+      }}
       onClick={interactive ? () => onSelect?.(coach) : undefined}
       className={cn(
         "flex items-center gap-3 rounded-xl border bg-surface-2 p-3 text-left transition-all",
-        interactive && !disabled && "hover:border-gold/60 hover:bg-surface",
+        interactive && !disabled && "cursor-grab hover:border-gold/60 hover:bg-surface active:cursor-grabbing",
         selected && "border-gold ring-1 ring-gold",
         !selected && !disabled && "border-line",
         disabled && "cursor-not-allowed opacity-40",
