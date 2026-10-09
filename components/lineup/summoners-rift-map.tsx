@@ -13,7 +13,7 @@ export const MAP_SLOTS: Record<Rota, { x: number; y: number }> = {
   TOP: { x: 18, y: 20 },
   JG: { x: 33, y: 40 },
   MID: { x: 50, y: 47 },
-  ADC: { x: 70, y: 80 },
+  ADC: { x: 78, y: 84 },
   SUP: { x: 86, y: 90 },
 };
 
