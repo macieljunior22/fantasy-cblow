@@ -37,7 +37,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
             : error.message);
           return;
         }
-        router.push("/");
+        router.push("/inicio");
         router.refresh();
         return;
       }
@@ -55,7 +55,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         return;
       }
       if (data.session) {
-        router.push("/");
+        router.push("/inicio");
         router.refresh();
       } else {
         setInfo("Conta criada! Confirme seu e-mail para entrar.");
@@ -83,7 +83,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
       <p className="mb-4 text-sm text-muted">
         {isLogin
           ? "Acesse sua conta para montar o time."
-          : "Cadastre-se e receba 100 cartoletas para montar seu time."}
+          : "Cadastre-se e receba 150 LOW Coins para montar seu time."}
       </p>
 
       <form action={handleSubmit} className="flex flex-col gap-3">

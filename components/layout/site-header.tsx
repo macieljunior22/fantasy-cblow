@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { getSessionProfile } from "@/lib/auth";
-import { signOut } from "@/lib/actions/auth";
+import { UserMenu } from "@/components/layout/user-menu";
 import { cn } from "@/lib/utils";
 
 const linkClass =
@@ -42,18 +42,17 @@ export async function SiteHeader() {
           )}
 
           {user && profile ? (
-            <div className="flex items-center gap-3">
-              <span className="hidden text-sm sm:inline">
-                <span className="text-muted">{profile.nickname}</span>{" "}
-                <span className="font-semibold text-gold">
-                  {profile.saldo_cartoletas}¢
-                </span>
-              </span>
-              <form action={signOut}>
-                <button type="submit" className={linkClass}>
-                  Sair
-                </button>
-              </form>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link href="/escalar" className="btn-ghost !px-3 !py-1.5 !text-xs sm:!text-sm">
+                Minha escalação
+              </Link>
+              <Link
+                href="/mercado"
+                className="hidden !px-3 !py-1.5 !text-xs sm:!inline-flex sm:!text-sm btn-ghost"
+              >
+                Mercado
+              </Link>
+              <UserMenu profile={profile} />
             </div>
           ) : (
             <div className="flex items-center gap-2">

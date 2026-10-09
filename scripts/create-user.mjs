@@ -8,8 +8,6 @@
  * Ex.:
  *   npm run user:create -- admin@cblow.app "Cblow#Admin2026" admin --admin
  */
-import { createClient } from "@supabase/supabase-js";
-
 const [, , email, password, nickname, flag] = process.argv;
 const isAdmin = flag === "--admin";
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -20,9 +18,6 @@ if (!email || !password || !nickname || !url || !key) {
   process.exit(1);
 }
 
-const db = createClient(url, key, {
-  auth: { persistSession: false, autoRefreshToken: false },
-});
 const H = { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
 
 // 1. Criar (ou localizar se já existir) --------------------------------

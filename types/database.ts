@@ -37,6 +37,17 @@ export interface TeamCblow {
   created_at: string;
 }
 
+/** Técnico/Presidente individual (selecionável na escalação). */
+export interface Coach {
+  id: string;
+  nome: string;
+  team_id: string;
+  foto_url: string | null;
+  preco: number;
+  ativo: boolean;
+  created_at: string;
+}
+
 export interface PlayerCblow {
   id: string;
   nick: string;

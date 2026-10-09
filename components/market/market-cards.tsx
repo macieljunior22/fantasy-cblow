@@ -1,0 +1,111 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+import type { Coach, PlayerCblow, Rota } from "@/types/database";
+
+const ROTA_LABEL: Record<Rota, string> = {
+  TOP: "Topo",
+  JG: "Caçador",
+  MID: "Meio",
+  ADC: "Atirador",
+  SUP: "Suporte",
+};
+
+/** Card de jogador no mercado (foto, nick/tag, time, preço em LOW Coins). */
+export function PlayerMarketCard({
+  player,
+  teamTag,
+  selected,
+  disabled,
+  onSelect,
+}: {
+  player: PlayerCblow;
+  teamTag?: string;
+  selected?: boolean;
+  disabled?: boolean;
+  onSelect?: (p: PlayerCblow) => void;
+}) {
+  const interactive = Boolean(onSelect);
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={interactive ? () => onSelect?.(player) : undefined}
+      className={cn(
+        "flex items-center gap-3 rounded-xl border bg-surface-2 p-3 text-left transition-all",
+        interactive && !disabled && "hover:border-gold/60 hover:bg-surface",
+        selected && "border-gold ring-1 ring-gold",
+        !selected && !disabled && "border-line",
+        disabled && "cursor-not-allowed opacity-40",
+        !interactive && "border-line",
+      )}
+    >
+      {player.foto_url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={player.foto_url}
+          alt={player.nick}
+          className="h-12 w-12 flex-shrink-0 rounded-lg object-cover"
+        />
+      ) : (
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-surface text-muted">
+          ?
+        </div>
+      )}
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-semibold">
+          {player.nick}
+          <span className="ml-1 text-xs text-muted">#{player.tag_line}</span>
+        </p>
+        <p className="text-xs text-muted">
+          {ROTA_LABEL[player.rota]}
+          {teamTag ? ` · ${teamTag}` : ""}
+        </p>
+      </div>
+      <span className="flex-shrink-0 font-mono text-sm font-bold text-gold">
+        {player.preco}
+      </span>
+    </button>
+  );
+}
+
+/** Card de técnico no mercado. */
+export function CoachMarketCard({
+  coach,
+  selected,
+  disabled,
+  onSelect,
+}: {
+  coach: Coach;
+  selected?: boolean;
+  disabled?: boolean;
+  onSelect?: (c: Coach) => void;
+}) {
+  const interactive = Boolean(onSelect);
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={interactive ? () => onSelect?.(coach) : undefined}
+      className={cn(
+        "flex items-center gap-3 rounded-xl border bg-surface-2 p-3 text-left transition-all",
+        interactive && !disabled && "hover:border-gold/60 hover:bg-surface",
+        selected && "border-gold ring-1 ring-gold",
+        !selected && !disabled && "border-line",
+        disabled && "cursor-not-allowed opacity-40",
+        !interactive && "border-line",
+      )}
+    >
+      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gold/15 text-lg">
+        🧑‍✈️
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-semibold">{coach.nome}</p>
+        <p className="text-xs text-muted">Técnico / Presidente</p>
+      </div>
+      <span className="flex-shrink-0 font-mono text-sm font-bold text-gold">
+        {coach.preco}
+      </span>
+    </button>
+  );
+}
