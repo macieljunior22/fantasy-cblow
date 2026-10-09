@@ -138,9 +138,9 @@ export function LineupBuilder({
   const activeCoach = coachId ? coachById.get(coachId) : undefined;
   const activeLabel = SLOTS.find((s) => s.rota === active)?.label;
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,26rem)_1fr]">
       {/* ===================== MAPA ===================== */}
-      <div className="order-2 lg:order-1">
+      <div className="order-1">
         <SummonersRiftMap>
           {SLOTS.map(({ rota }) => {
             const pos = MAP_SLOTS[rota];
@@ -170,14 +170,14 @@ export function LineupBuilder({
                 }}
                 style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
                 className="group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center disabled:cursor-not-allowed"
-                title={picked ? `${picked.nick} — toque para trocar` : `Escolher ${rota}`}
+                title={picked ? `${picked.nick} — clique para trocar` : `Escolher ${rota}`}
               >
                 <span
                   className={cn(
-                    "relative flex h-14 w-14 items-center justify-center rounded-full border-2 backdrop-blur-sm transition-all sm:h-16 sm:w-16",
+                    "relative flex h-16 w-16 items-center justify-center rounded-full border-[3px] backdrop-blur-sm transition-all sm:h-[4.5rem] sm:w-[4.5rem]",
                     isActive
-                      ? "border-gold bg-gold/25 shadow-[0_0_18px_-2px_rgba(216,189,142,0.75)]"
-                      : "border-line bg-black/50 group-hover:border-gold/60",
+                      ? "border-gold bg-gold/25 shadow-[0_0_22px_-2px_rgba(216,189,142,0.85)]"
+                      : "border-foreground/70 bg-black/60 group-hover:border-gold/60",
                     dragOver === rota && "scale-110 border-live bg-live/20",
                     !picked && !isActive && "opacity-80",
                   )}
@@ -194,7 +194,7 @@ export function LineupBuilder({
                       {picked.nick.slice(0, 2).toUpperCase()}
                     </span>
                   ) : (
-                    <Icon className="h-6 w-6 text-gold/80" />
+                    <Icon className="h-7 w-7 text-gold" />
                   )}
                 </span>
                 <span
@@ -209,7 +209,7 @@ export function LineupBuilder({
             );
           })}
 
-          {/* Técnico no canto inferior esquerdo */}
+          {/* Técnico no topo, fora das lanes */}
           <button
             type="button"
             disabled={!marketOpen}
@@ -224,9 +224,9 @@ export function LineupBuilder({
             onDragOver={(e) => {
               if (marketOpen) e.preventDefault();
             }}
-            style={{ left: "9%", top: "90%" }}
+            style={{ left: "8%", top: "8%" }}
             className="group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center disabled:cursor-not-allowed"
-            title={activeCoach ? `${activeCoach.nome} — toque para trocar` : "Escolher Técnico"}
+            title={activeCoach ? `${activeCoach.nome} — clique para trocar` : "Escolher Técnico"}
           >
             <span
               className={cn(
@@ -256,8 +256,8 @@ export function LineupBuilder({
         </p>
       </div>
 
-      {/* ===================== PAINEL "SEU TIME" ===================== */}
-      <aside className="panel order-1 flex flex-col lg:order-2">
+      {/* ========== PAINEL LATERAL: SEU TIME + OPÇÕES DA ROTA ATIVA ========== */}
+      <aside className="panel order-2 flex flex-col lg:order-2">
         <div className="flex items-center justify-between">
           <h2 className="font-bold">Seu time</h2>
           <span
@@ -357,48 +357,46 @@ export function LineupBuilder({
             </p>
           )}
         </div>
-      </aside>
 
-      {/* ===================== LISTA DE OPÇÕES ===================== */}
-      <div className="order-3 lg:col-span-2">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
+        {/* ---- Opções da bolinha ativa (rota clicada no mapa) ---- */}
+        <div className="mt-4 border-t border-line pt-3">
           <span className="flex items-center gap-1.5 text-sm font-semibold text-muted">
             <Sparkles className="h-4 w-4 text-gold" />
             {active === "TEC" ? "Escolha um Técnico" : `Escolha o ${activeLabel}`}
           </span>
-        </div>
 
-        {active === "TEC" ? (
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {coaches.map((c) => (
-              <CoachMarketCard
-                key={c.id}
-                coach={c}
-                selected={coachId === c.id}
-                onSelect={marketOpen ? pickCoach : undefined}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {available.map((p) => (
-              <PlayerMarketCard
-                key={p.id}
-                player={p}
-                teamTag={p.team_id ? teamTagById[p.team_id] : undefined}
-                selected={picks[p.rota] === p.id}
-                disabled={!marketOpen}
-                onSelect={marketOpen ? pickPlayer : undefined}
-              />
-            ))}
-            {available.length === 0 && (
-              <p className="text-sm text-muted">
-                Nenhum jogador desta rota cabe no orçamento restante.
-              </p>
+          <div className="mt-2 flex max-h-72 flex-col gap-2 overflow-y-auto pr-1">
+            {active === "TEC" ? (
+              coaches.map((c) => (
+                <CoachMarketCard
+                  key={c.id}
+                  coach={c}
+                  selected={coachId === c.id}
+                  onSelect={marketOpen ? pickCoach : undefined}
+                />
+              ))
+            ) : (
+              <>
+                {available.map((p) => (
+                  <PlayerMarketCard
+                    key={p.id}
+                    player={p}
+                    teamTag={p.team_id ? teamTagById[p.team_id] : undefined}
+                    selected={picks[p.rota] === p.id}
+                    disabled={!marketOpen}
+                    onSelect={marketOpen ? pickPlayer : undefined}
+                  />
+                ))}
+                {available.length === 0 && (
+                  <p className="text-sm text-muted">
+                    Nenhum jogador desta rota cabe no orçamento restante.
+                  </p>
+                )}
+              </>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      </aside>
     </div>
   );
 }
