@@ -52,7 +52,7 @@ export default function HomePage() {
         </h1>
 
         <p className="max-w-xl text-lg text-muted">
-          100 cartoletas, 5 jogadores (Top, Jungle, Mid, ADC, Support) + um
+          150 LOW Coins, 5 jogadores (Top, Jungle, Mid, ADC, Support) + um
           Técnico. Kills, assists, objetivos e vitórias viram pontos — em tempo
           real, direto do client do LoL.
         </p>
