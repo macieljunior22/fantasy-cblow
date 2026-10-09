@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "capture": "node --env-file-if-exists=.env.local scripts/live-capture/main.mts",
-    "seed:gen": "node --env-file-if-exists=.env.local scripts/generate-seed.mjs"
+    "seed:gen": "node --env-file-if-exists=.env.local scripts/generate-seed.mjs",
+    "db:sql": "node scripts/apply-sql.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -24,10 +25,12 @@
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
+    "pg": "^8.23.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

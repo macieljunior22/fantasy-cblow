@@ -171,7 +171,7 @@ async function main() {
 -- então re-execuções são seguras e preservam edições manuais (preço etc.).
 -- =============================================================================
 
-insert into public.teams_cblow (id, nome, tag, presidente, preco_presidente, logo_url)
+insert into public.teams_cblow (id, nome, tag, presidente, logo_url)
 values
 ${teamsValues}
 on conflict do nothing;

@@ -1,12 +1,12 @@
 -- =============================================================================
 -- CBLOW 0005: SEED (times + jogadores + fotos) — GERADO AUTOMATICAMENTE
--- Gerado por scripts/generate-seed.mjs a partir de https://api.cblow.xyz em 2026-10-09T02:33:03.791Z
+-- Gerado por scripts/generate-seed.mjs a partir de https://api.cblow.xyz em 2026-10-09T02:40:16.557Z
 -- NÃO EDITE À MÃO: rode "npm run seed:gen" para regenerar.
 -- Ids são determinísticos (md5) e o insert usa ON CONFLICT DO NOTHING,
 -- então re-execuções são seguras e preservam edições manuais (preço etc.).
 -- =============================================================================
 
-insert into public.teams_cblow (id, nome, tag, presidente, preco_presidente, logo_url)
+insert into public.teams_cblow (id, nome, tag, presidente, logo_url)
 values
   ('097e2ac7-3b20-d5d6-bc21-9fdeea836a85', 'AMIGOS DO MYLENNZY', 'ADM', 'Kennzy e Mylon', NULL),
   ('a6a203ce-e525-0d63-f190-6556ee73ff2b', 'GAYNEY RYODAN', 'GR', 'Minerva e Brucer', NULL),
