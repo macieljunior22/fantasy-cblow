@@ -10,12 +10,15 @@ import type { Rota } from "@/types/database";
  * quadrante superior-central, MID no centro, ADC/SUP na parte inferior.
  */
 export const MAP_SLOTS: Record<Rota, { x: number; y: number }> = {
-  TOP: { x: 18, y: 18 },
-  JG: { x: 34, y: 34 },
-  MID: { x: 52, y: 48 },
-  ADC: { x: 62, y: 78 },
-  SUP: { x: 78, y: 68 },
+  TOP: { x: 14, y: 20 },
+  JG: { x: 38, y: 33 },
+  MID: { x: 50, y: 47 },
+  ADC: { x: 51, y: 75 },
+  SUP: { x: 68, y: 62 },
 };
+
+/** Posição da bolinha do TÉCNICO: base inferior (onde começam os jogadores). */
+export const COACH_SLOT = { x: 14, y: 88 };
 
 /**
  * Foto oficial do Summoner's Rift (baixada para `public/map/`) com as

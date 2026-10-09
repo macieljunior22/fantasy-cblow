@@ -50,24 +50,24 @@ export function PlayerMarketCard({
         <img
           src={player.foto_url}
           alt={player.nick}
-          className="h-12 w-12 flex-shrink-0 rounded-lg object-cover"
+          className="h-9 w-9 flex-shrink-0 rounded-md object-cover"
         />
       ) : (
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-surface text-muted">
+        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-surface text-muted">
           ?
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <p className="truncate font-semibold">
+        <p className="truncate text-sm font-semibold">
           {player.nick}
-          <span className="ml-1 text-xs text-muted">#{player.tag_line}</span>
+          <span className="ml-1 text-[11px] text-muted">#{player.tag_line}</span>
         </p>
-        <p className="text-xs text-muted">
+        <p className="text-[11px] text-muted">
           {ROTA_LABEL[player.rota]}
           {teamTag ? ` · ${teamTag}` : ""}
         </p>
       </div>
-      <span className="flex-shrink-0 font-mono text-sm font-bold text-gold">
+      <span className="flex-shrink-0 font-mono text-xs font-bold text-gold">
         {player.preco}
       </span>
     </button>
@@ -106,14 +106,14 @@ export function CoachMarketCard({
         !interactive && "border-line",
       )}
     >
-      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gold/15 text-lg">
+      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md bg-gold/15 text-base">
         🧑‍✈️
       </div>
       <div className="min-w-0 flex-1">
-        <p className="truncate font-semibold">{coach.nome}</p>
-        <p className="text-xs text-muted">Técnico / Presidente</p>
+        <p className="truncate text-sm font-semibold">{coach.nome}</p>
+        <p className="text-[11px] text-muted">Técnico / Presidente</p>
       </div>
-      <span className="flex-shrink-0 font-mono text-sm font-bold text-gold">
+      <span className="flex-shrink-0 font-mono text-xs font-bold text-gold">
         {coach.preco}
       </span>
     </button>

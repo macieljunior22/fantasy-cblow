@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import { CoachMarketCard, PlayerMarketCard } from "@/components/market/market-cards";
-import { MAP_SLOTS, SummonersRiftMap } from "@/components/lineup/summoners-rift-map";
+import { COACH_SLOT, MAP_SLOTS, SummonersRiftMap } from "@/components/lineup/summoners-rift-map";
 import { deleteLineup, saveLineup } from "@/lib/actions/lineup";
 import { cn } from "@/lib/utils";
 import type { Coach, Lineup, PlayerCblow, Rota } from "@/types/database";
@@ -138,7 +138,7 @@ export function LineupBuilder({
   const activeCoach = coachId ? coachById.get(coachId) : undefined;
   const activeLabel = SLOTS.find((s) => s.rota === active)?.label;
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,26rem)_1fr]">
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
       {/* ===================== MAPA ===================== */}
       <div className="order-1">
         <SummonersRiftMap>
@@ -209,7 +209,7 @@ export function LineupBuilder({
             );
           })}
 
-          {/* Técnico no topo, fora das lanes */}
+          {/* Técnico na base (onde começam os jogadores) */}
           <button
             type="button"
             disabled={!marketOpen}
@@ -224,7 +224,7 @@ export function LineupBuilder({
             onDragOver={(e) => {
               if (marketOpen) e.preventDefault();
             }}
-            style={{ left: "8%", top: "8%" }}
+            style={{ left: `${COACH_SLOT.x}%`, top: `${COACH_SLOT.y}%` }}
             className="group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center disabled:cursor-not-allowed"
             title={activeCoach ? `${activeCoach.nome} — clique para trocar` : "Escolher Técnico"}
           >
@@ -271,61 +271,6 @@ export function LineupBuilder({
           </span>
         </div>
         <p className="mt-0.5 text-xs text-muted">Restante de {budget.toFixed(2)} LOW Coins</p>
-
-        <ul className="mt-4 flex flex-col gap-1.5 border-t border-line pt-3 text-sm">
-          {SLOTS.map(({ rota, label }) => {
-            const pickedId = picks[rota];
-            const picked = pickedId ? playerById.get(pickedId) : undefined;
-            return (
-              <li key={rota}>
-                <button
-                  type="button"
-                  disabled={!marketOpen}
-                  onClick={() => setActive(rota)}
-                  className={cn(
-                    "flex w-full items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left transition-colors disabled:opacity-60",
-                    active === rota
-                      ? "border-gold/60 bg-gold/10"
-                      : "border-line hover:border-gold/40",
-                  )}
-                >
-                  <span className="text-xs text-muted">{label}</span>
-                  {picked ? (
-                    <span className="flex min-w-0 items-center gap-1.5">
-                      <span className="truncate font-medium">{picked.nick}</span>
-                      <span className="font-mono text-xs text-gold">{picked.preco}</span>
-                    </span>
-                  ) : (
-                    <span className="text-xs text-muted">vazio</span>
-                  )}
-                </button>
-              </li>
-            );
-          })}
-          <li>
-            <button
-              type="button"
-              disabled={!marketOpen}
-              onClick={() => setActive("TEC")}
-              className={cn(
-                "flex w-full items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left transition-colors disabled:opacity-60",
-                active === "TEC"
-                  ? "border-gold/60 bg-gold/10"
-                  : "border-line hover:border-gold/40",
-              )}
-            >
-              <span className="text-xs text-muted">Técnico</span>
-              {activeCoach ? (
-                <span className="flex min-w-0 items-center gap-1.5">
-                  <span className="truncate font-medium">{activeCoach.nome}</span>
-                  <span className="font-mono text-xs text-gold">{activeCoach.preco}</span>
-                </span>
-              ) : (
-                <span className="text-xs text-muted">vazio</span>
-              )}
-            </button>
-          </li>
-        </ul>
 
         <div className="mt-4 flex flex-col gap-2">
           <button
