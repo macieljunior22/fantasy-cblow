@@ -1,0 +1,88 @@
+-- =============================================================================
+-- CBLOW 0005: SEED (times + jogadores + fotos) — GERADO AUTOMATICAMENTE
+-- Gerado por scripts/generate-seed.mjs a partir de https://api.cblow.xyz em 2026-10-09T02:33:03.791Z
+-- NÃO EDITE À MÃO: rode "npm run seed:gen" para regenerar.
+-- Ids são determinísticos (md5) e o insert usa ON CONFLICT DO NOTHING,
+-- então re-execuções são seguras e preservam edições manuais (preço etc.).
+-- =============================================================================
+
+insert into public.teams_cblow (id, nome, tag, presidente, preco_presidente, logo_url)
+values
+  ('097e2ac7-3b20-d5d6-bc21-9fdeea836a85', 'AMIGOS DO MYLENNZY', 'ADM', 'Kennzy e Mylon', NULL),
+  ('a6a203ce-e525-0d63-f190-6556ee73ff2b', 'GAYNEY RYODAN', 'GR', 'Minerva e Brucer', NULL),
+  ('7930c382-bb08-df9b-1cd1-76c0fc292865', 'LOS TROLLS', 'LT', 'Rodil e El Gato', NULL),
+  ('66b925b3-5132-5645-c17b-536a555d3048', 'LULLA GAMING', 'LG', 'Yulla e Luma', NULL),
+  ('fa8041ca-9c81-aaa9-a0a3-eb750785b780', 'PIT BRONZES', 'PB', 'Ayel e Asteek', NULL),
+  ('171c99a6-073a-bc79-eed3-18562e067ddb', 'SKTENIS', 'SKTE', 'Revolta e Yetz', NULL),
+  ('94916b05-2557-3fb7-aeb3-d7d9b1596205', 'SUCATA IN BOX', 'SIB', 'Jukes e Dynquedo', NULL),
+  ('84ad0111-30cb-9a57-5aed-1be03eab8763', 'VOS BRONZES', 'VB', 'Absolut e Lord Semi', NULL)
+on conflict do nothing;
+
+insert into public.players_cblow (id, nick, tag_line, rota, foto_url, preco, team_id, ativo)
+values
+  ('bd7e3796-75a5-8752-1abd-fc8a0790b298', 'ADCarry4estranha', 'BR1', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/adcarry4estranha.webp', 9.00, '84ad0111-30cb-9a57-5aed-1be03eab8763', true),
+  ('7a4ca875-0ce1-69b2-93a5-7ebe30e34c14', 'Aninha Gameplay', '2108', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/aninha-gameplay.webp', 10.00, '94916b05-2557-3fb7-aeb3-d7d9b1596205', true),
+  ('0626d125-38b2-1a5a-bf5d-f534222f4b6e', 'Avelar', 'EKKO', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/avelar.webp', 12.00, '66b925b3-5132-5645-c17b-536a555d3048', true),
+  ('a820be25-cd4c-67f1-27b5-f57f622d9574', 'BearKing (Judas)', 'LOS', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/bearking.webp', 10.00, '7930c382-bb08-df9b-1cd1-76c0fc292865', true),
+  ('81f91c70-521e-d180-7f59-66058f91ffc2', 'Bronahh', 'RH3C', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/bronahh.webp', 11.00, 'fa8041ca-9c81-aaa9-a0a3-eb750785b780', true),
+  ('27c14294-6e36-e6d5-321b-dc84877b94bc', 'Ceyf', 'BR1', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/ceyf.webp', 10.00, '171c99a6-073a-bc79-eed3-18562e067ddb', true),
+  ('7f63e294-72cd-8f52-fa78-4246db82ff01', 'Chender', 'BOY', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/chender.webp', 10.00, '84ad0111-30cb-9a57-5aed-1be03eab8763', true),
+  ('ccd80015-b8af-8085-7a97-e948b51d8f8c', 'CoelhaPistoleira', 'TTV', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/coelhapistoleira.webp', 9.00, '94916b05-2557-3fb7-aeb3-d7d9b1596205', true),
+  ('90455a2f-72e3-334c-2eac-8f1ec4d7e271', 'Criptogirl', '6677', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/criptogirl.webp', 12.00, 'a6a203ce-e525-0d63-f190-6556ee73ff2b', true),
+  ('9a58119c-8430-d782-ecfa-43ff1761158d', 'DAEMON', '019', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/daemon.webp', 10.00, 'a6a203ce-e525-0d63-f190-6556ee73ff2b', true),
+  ('d8cc2816-2078-027a-e842-7796e365dbe1', 'DNS', '2001Q', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/dns.webp', 12.00, 'a6a203ce-e525-0d63-f190-6556ee73ff2b', true),
+  ('72a36036-aff9-ace9-8b74-a60d3875387c', 'ExC4mBau', '6344', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/exc4mbau.webp', 11.00, '171c99a6-073a-bc79-eed3-18562e067ddb', true),
+  ('caf9055d-cd1b-c705-56a9-0fe9d9d7c87e', 'GMZAO', '867', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/gmzao.webp', 12.00, 'fa8041ca-9c81-aaa9-a0a3-eb750785b780', true),
+  ('fcffd634-cbb1-4e28-b2e8-1edc73bca13c', 'Gabis Koersen', 'BR1', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/gabis-koersen.webp', 9.00, '94916b05-2557-3fb7-aeb3-d7d9b1596205', true),
+  ('85d2c9ea-1a68-f44f-bf7f-c4649ef500a3', 'JZKDZK', '6407', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/jzkdzk.webp', 11.00, '84ad0111-30cb-9a57-5aed-1be03eab8763', true),
+  ('72357622-7e20-de65-31eb-571afd4926c9', 'Jessyjbr', 'JESSY', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/jessyjbr.webp', 9.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('bbea1992-d132-2122-9417-da442e9d5d0a', 'KAMIMAE', 'BR1', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/kamimae.webp', 12.00, '84ad0111-30cb-9a57-5aed-1be03eab8763', true),
+  ('d9a6d541-8c58-5e2f-ee4e-d1b22bef7d81', 'KarlinRox', 'BR1', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/karlinrox.webp', 10.00, '171c99a6-073a-bc79-eed3-18562e067ddb', true),
+  ('64280c44-7de1-37cb-7054-1b720b19f8a6', 'LODE', 'SILVA', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/lode.webp', 12.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('cabb2221-f479-2e2c-96d9-ce7ecdb1d59e', 'Lua', 'KKJ', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/lua.webp', 9.00, '7930c382-bb08-df9b-1cd1-76c0fc292865', true),
+  ('f46e46ac-c2aa-c313-6784-7b6035b53c5d', 'Lyer', '5641', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/lyer.webp', 12.00, '94916b05-2557-3fb7-aeb3-d7d9b1596205', true),
+  ('6221f0a1-664c-bc49-8a77-d4238b3afe06', 'Mr Zul', 'BR1', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/mr-zul.webp', 11.00, '66b925b3-5132-5645-c17b-536a555d3048', true),
+  ('05579d47-04a7-8934-5727-93f666a8d958', 'N00XBLAD3', 'NOOX', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/n00xblad3.webp', 9.00, '66b925b3-5132-5645-c17b-536a555d3048', true),
+  ('05643294-3df5-18a0-846a-e8d5e5ccac8c', 'NightKnighth', 'CBLOW', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/nightknighth.webp', 9.00, '7930c382-bb08-df9b-1cd1-76c0fc292865', true),
+  ('5e2edfee-24dc-9b84-a4ee-389fce21c0c1', 'PastorDeCalcinha', 'ZYRAO', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/pastordecalcinha.webp', 9.00, '171c99a6-073a-bc79-eed3-18562e067ddb', true),
+  ('27e1de9d-7d2c-d6c2-1f6e-2ff98c61ddc6', 'Peuvinii', '7320', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/peuvinii.webp', 10.00, '66b925b3-5132-5645-c17b-536a555d3048', true),
+  ('b534fccb-bec3-8444-c110-59863ba9dcad', 'Quequel', '711', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/quequel.webp', 9.00, '7930c382-bb08-df9b-1cd1-76c0fc292865', true),
+  ('a04386a2-59f8-80e5-7793-9e14d613b285', 'RAMMUS', 'TAUNT', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/rammus.webp', 11.00, '94916b05-2557-3fb7-aeb3-d7d9b1596205', true),
+  ('07831f63-8430-161f-ac5b-557dc14bdb1d', 'REXPEITA O VOVÔ', 'BR1', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/rexpeita-o-vovo.webp', 12.00, '84ad0111-30cb-9a57-5aed-1be03eab8763', true),
+  ('b2353b40-b38a-7580-bb3c-5290e3cab7b0', 'Rakketsu', 'BR1', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/rakketsu.webp', 12.00, '66b925b3-5132-5645-c17b-536a555d3048', true),
+  ('3ef5e911-aea1-724e-971d-493b8b4e2c9f', 'Raposinha', 'RAP', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/raposinha.webp', 9.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('65544a9a-750e-8772-2934-cebc4c7adda4', 'SATAANDAGI', 'OSAK', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/sataandagi.webp', 10.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('b9d03ca7-dc04-df24-0411-f38451ce4661', 'SK4RAVELHO', 'BR1', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/sk4ravelho.webp', 12.00, '171c99a6-073a-bc79-eed3-18562e067ddb', true),
+  ('f2d16a2d-5ad0-e8ed-3dca-c3ae50c32826', 'Sacisde', 'PIT', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/sacisde.webp', 9.00, 'fa8041ca-9c81-aaa9-a0a3-eb750785b780', true),
+  ('0d3a6c8b-47b9-c045-c00f-3f793ddf0403', 'Serphiroth', 'BR1', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/serphiroth.webp', 12.00, '66b925b3-5132-5645-c17b-536a555d3048', true),
+  ('cdebc254-8e9a-ee01-2f32-238c3141b213', 'Solletto', 'BR1', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/solletto.webp', 9.00, 'a6a203ce-e525-0d63-f190-6556ee73ff2b', true),
+  ('7def6e88-a84d-615e-d645-e9df55afffba', 'SrTaveira', 'BR1', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/srtaveira.webp', 9.00, '171c99a6-073a-bc79-eed3-18562e067ddb', true),
+  ('fba2ba08-8d02-6593-4b5c-56f2625bed94', 'ThunderTchuck', 'BR1', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/thundertchuck.webp', 11.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('cabc0faa-6f3d-679f-bdb8-c0acedd629fb', 'TiXE', 'AGO', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/tixe.webp', 12.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('d238c3de-e521-5c6b-3b8e-4d1bb05edbce', 'TioZhaoLOL', 'TZLOL', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/tiozhaolol.webp', 12.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('bb33a231-c296-6757-b4c4-bcce5b4dc830', 'Ussgust', 'BR1', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/ussgust.webp', 11.00, 'a6a203ce-e525-0d63-f190-6556ee73ff2b', true),
+  ('ef264697-3405-0c35-b1c9-ee7c2049c3e2', 'Visao', 'FLA', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/visao.webp', 12.00, 'fa8041ca-9c81-aaa9-a0a3-eb750785b780', true),
+  ('3be6cdab-b059-ac2d-0f22-135b97846991', 'VosUzz', '001', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/vosuzz.webp', 11.00, '171c99a6-073a-bc79-eed3-18562e067ddb', true),
+  ('f16dbccb-5f7d-6ce9-aab4-21baa914ed73', 'Vô Corvo', 'VOBR1', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/vo-corvo.webp', 11.00, '7930c382-bb08-df9b-1cd1-76c0fc292865', true),
+  ('f47da3da-044b-8628-79f7-edef7527deb9', 'Wandersondantas (Tio Chico)', 'LOS', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/wandersondantas.webp', 12.00, '7930c382-bb08-df9b-1cd1-76c0fc292865', true),
+  ('3e8a1334-b23b-0fa5-aec2-973bdc830ede', 'Xaanden', '5939', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/xaanden.webp', 11.00, 'a6a203ce-e525-0d63-f190-6556ee73ff2b', true),
+  ('57e1d989-f577-cdc0-3fb4-c292a6ce8e2b', 'YouGlubGlub', 'GLUB', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/youglubglub.webp', 12.00, '94916b05-2557-3fb7-aeb3-d7d9b1596205', true),
+  ('78a12195-346d-a25b-9b5c-a61c23cfb5ed', 'cal kestis (Franclipse)', 'BR1', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/cal-kestis.webp', 12.00, '7930c382-bb08-df9b-1cd1-76c0fc292865', true),
+  ('f1d0d63b-223f-a6a2-29b6-adce85495334', 'calvo aos 25', 'CALVO', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/calvo-aos-25.webp', 11.00, '84ad0111-30cb-9a57-5aed-1be03eab8763', true),
+  ('23bc405c-1eff-1cc2-10cd-6c5d8c881602', 'drytski', 'UWU', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/drytski.webp', 12.00, '171c99a6-073a-bc79-eed3-18562e067ddb', true),
+  ('e514dd56-1b6a-bd3e-7a25-4702da304257', 'edy', '7722', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/edy.webp', 11.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('11fe0d7d-1e22-fbdf-eb06-3983bdee032f', 'feeermara69 (LOS Rochelle)', 'FER', 'SUP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/feeermara69.webp', 9.00, '7930c382-bb08-df9b-1cd1-76c0fc292865', true),
+  ('a764f21d-a6fa-ff61-5d0b-0af60baeb15b', 'flordelotus18', 'TIA', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/flordelotus18.webp', 12.00, 'fa8041ca-9c81-aaa9-a0a3-eb750785b780', true),
+  ('3746da5f-2b3f-7ec8-bb1a-4cd43def4952', 'gORDOx', 'GDX', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/gordox.webp', 12.00, 'a6a203ce-e525-0d63-f190-6556ee73ff2b', true),
+  ('b418de15-4c53-e876-fa73-c7c3a163dfb2', 'idosodolol', '3936', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/idosodolol.webp', 11.00, '097e2ac7-3b20-d5d6-bc21-9fdeea836a85', true),
+  ('c2f3310c-9d1e-c070-23a6-37528296453c', 'iloveHusky', 'TEADH', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/ilovehusky.webp', 10.00, 'a6a203ce-e525-0d63-f190-6556ee73ff2b', true),
+  ('22789391-313c-f748-117f-9d0b7ccbca50', 'mahthor', 'MARYH', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/mahthor.webp', 12.00, '84ad0111-30cb-9a57-5aed-1be03eab8763', true),
+  ('c908e5a5-6e1e-f6d6-d160-e044751319d3', 'mychamaqueeuvou', 'VELO', 'ADC', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/mychamaqueeuvou.webp', 12.00, '94916b05-2557-3fb7-aeb3-d7d9b1596205', true),
+  ('68218ff3-f79f-adc8-aac8-bcf52081ec21', 'noobzim', 'NOOB', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/noobzim.webp', 10.00, '66b925b3-5132-5645-c17b-536a555d3048', true),
+  ('607465b7-9f0d-5623-dbcc-8149dc5368ff', 'pedrin', 'CROSS', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/pedrin.webp', 10.00, '84ad0111-30cb-9a57-5aed-1be03eab8763', true),
+  ('858861fd-3257-24a3-fc45-9566bb93a7e2', 'superclt', 'BR2', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/superclt.webp', 10.00, 'fa8041ca-9c81-aaa9-a0a3-eb750785b780', true),
+  ('3331bb59-0c6e-a8fd-b8f3-667557ea5302', 'takaruplay', 'TAK', 'JG', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/takarukunaquina.webp', 11.00, 'fa8041ca-9c81-aaa9-a0a3-eb750785b780', true),
+  ('bc8fb6e4-ec17-d72d-7c0d-02d48ea293b1', 'tutuespalhalixo', 'PIT', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/tutuespalhalixo.webp', 10.00, 'fa8041ca-9c81-aaa9-a0a3-eb750785b780', true),
+  ('b0bf55bc-251c-1f74-8894-597da3cd78c4', 'umanana', 'BR1', 'MID', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/umanana.webp', 12.00, '66b925b3-5132-5645-c17b-536a555d3048', true),
+  ('d6eeddca-1435-8b63-3896-0333ce27a621', 'yasuocadeirante', 'MONO', 'TOP', 'https://toxvbcnknhutntmvpmza.supabase.co/storage/v1/object/public/fotos/yasuocadeirante.webp', 10.00, '94916b05-2557-3fb7-aeb3-d7d9b1596205', true)
+on conflict do nothing;

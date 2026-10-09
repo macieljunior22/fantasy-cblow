@@ -95,7 +95,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
               required
               maxLength={24}
               placeholder="Ex.: Bronziocre"
-              className="rounded-lg border border-line bg-surface-2 px-3 py-2 outline-none focus:border-neon-purple"
+              className="rounded-lg border border-line bg-surface-2 px-3 py-2 outline-none focus:border-gold"
             />
           </label>
         )}
@@ -106,7 +106,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
             type="email"
             required
             autoComplete="email"
-            className="rounded-lg border border-line bg-surface-2 px-3 py-2 outline-none focus:border-neon-purple"
+            className="rounded-lg border border-line bg-surface-2 px-3 py-2 outline-none focus:border-gold"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -117,12 +117,12 @@ export function AuthForm({ mode }: { mode: Mode }) {
             required
             minLength={6}
             autoComplete={isLogin ? "current-password" : "new-password"}
-            className="rounded-lg border border-line bg-surface-2 px-3 py-2 outline-none focus:border-neon-purple"
+            className="rounded-lg border border-line bg-surface-2 px-3 py-2 outline-none focus:border-gold"
           />
         </label>
 
         {error && <p className="text-sm text-red-400">{error}</p>}
-        {info && <p className="text-sm text-neon-green">{info}</p>}
+        {info && <p className="text-sm text-live">{info}</p>}
 
         <button type="submit" disabled={pending} className="btn-primary w-full">
           {pending ? "Aguarde…" : isLogin ? "Entrar" : "Cadastrar"}
@@ -141,14 +141,14 @@ export function AuthForm({ mode }: { mode: Mode }) {
         {isLogin ? (
           <>
             Não tem conta?{" "}
-            <Link href="/cadastro" className="text-neon-purple hover:underline">
+            <Link href="/cadastro" className="text-gold hover:underline">
               Cadastre-se
             </Link>
           </>
         ) : (
           <>
             Já tem conta?{" "}
-            <Link href="/login" className="text-neon-purple hover:underline">
+            <Link href="/login" className="text-gold hover:underline">
               Entrar
             </Link>
           </>

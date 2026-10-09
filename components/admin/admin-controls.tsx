@@ -15,9 +15,9 @@ const STATUS_LABEL: Record<MatchStatus, string> = {
 
 const STATUS_STYLE: Record<MatchStatus, string> = {
   NOT_STARTED: "text-muted",
-  IN_PROGRESS: "text-neon-green",
-  PAUSED: "text-neon-yellow",
-  FINISHED: "text-neon-purple",
+  IN_PROGRESS: "text-live",
+  PAUSED: "text-warn",
+  FINISHED: "text-foreground",
 };
 
 export function AdminControls({
@@ -46,8 +46,8 @@ export function AdminControls({
             className={cn(
               "tag",
               marketStatus === "OPEN"
-                ? "border-neon-green/50 text-neon-green"
-                : "border-neon-yellow/50 text-neon-yellow",
+                ? "border-gold/50 text-gold"
+                : "border-line text-muted",
             )}
           >
             {marketStatus === "OPEN" ? "ABERTO" : "TRAVADO"}
@@ -74,7 +74,7 @@ export function AdminControls({
         {matches.length === 0 ? (
           <p className="text-sm text-muted">
             Nenhuma partida criada. Insira registros na tabela{" "}
-            <code className="text-neon-purple">matches</code>.
+            <code className="text-gold">matches</code>.
           </p>
         ) : (
           <ul className="flex flex-col gap-3">

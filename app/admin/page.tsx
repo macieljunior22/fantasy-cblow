@@ -51,7 +51,7 @@ export default function AdminPage() {
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8">
       <h1 className="mb-6 text-2xl font-extrabold">
-        Painel <span className="text-neon-yellow">Admin</span>
+        Painel <span className="text-gold">Admin</span>
       </h1>
       <Suspense fallback={<DashboardFallback />}>
         <AdminDashboard />

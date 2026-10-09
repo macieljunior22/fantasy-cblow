@@ -5,7 +5,7 @@ import { signOut } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
 
 const linkClass =
-  "text-sm text-muted transition-colors hover:text-neon-green";
+  "text-sm text-muted transition-colors hover:text-gold";
 
 /** Fallback do Suspense — shell estático do header. */
 export function SiteHeaderFallback() {
@@ -13,7 +13,7 @@ export function SiteHeaderFallback() {
     <header className="sticky top-0 z-40 border-b border-line bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4">
         <span className="font-bold tracking-tight">
-          CBLOW <span className="text-neon-purple">Fantasy</span>
+          CBLOW <span className="text-gold">Fantasy</span>
         </span>
         <div className="h-8 w-24 animate-pulse rounded bg-surface-2" />
       </div>
@@ -28,7 +28,7 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-line bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 px-4">
         <Link href="/" className="font-bold tracking-tight">
-          CBLOW <span className="text-neon-purple">Fantasy</span>
+          CBLOW <span className="text-gold">Fantasy</span>
         </Link>
 
         <nav className="flex items-center gap-4">
@@ -36,7 +36,7 @@ export async function SiteHeader() {
             Início
           </Link>
           {profile?.is_admin && (
-            <Link href="/admin" className={cn(linkClass, "text-neon-yellow")}>
+            <Link href="/admin" className={cn(linkClass, "text-gold")}>
               Admin
             </Link>
           )}
@@ -45,7 +45,7 @@ export async function SiteHeader() {
             <div className="flex items-center gap-3">
               <span className="hidden text-sm sm:inline">
                 <span className="text-muted">{profile.nickname}</span>{" "}
-                <span className="font-semibold text-neon-yellow">
+                <span className="font-semibold text-gold">
                   {profile.saldo_cartoletas}¢
                 </span>
               </span>

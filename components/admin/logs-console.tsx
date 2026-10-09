@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import type { SystemLog } from "@/types/database";
 
 const LEVEL_STYLE: Record<SystemLog["level"], string> = {
-  INFO: "text-neon-green",
-  WARN: "text-neon-yellow",
+  INFO: "text-live",
+  WARN: "text-warn",
   ERROR: "text-red-400",
 };
 
@@ -47,7 +47,7 @@ export function LogsConsole({ initial }: { initial: SystemLog[] }) {
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <h2 className="font-bold">
           Logs{" "}
-          <span className={cn("tag ml-1", live ? "text-neon-green" : "text-neon-yellow")}>
+          <span className={cn("tag ml-1", live ? "text-live" : "text-warn")}>
             {live ? "ao vivo" : "conectando…"}
           </span>
         </h2>
@@ -59,7 +59,7 @@ export function LogsConsole({ initial }: { initial: SystemLog[] }) {
               onClick={() => setFilter(level)}
               className={cn(
                 "btn-ghost !px-2.5 !py-1 !text-xs",
-                filter === level && "border-neon-purple text-neon-purple",
+                filter === level && "border-gold text-gold",
               )}
             >
               {level}
@@ -80,7 +80,7 @@ export function LogsConsole({ initial }: { initial: SystemLog[] }) {
               <span className={cn("shrink-0 font-bold", LEVEL_STYLE[log.level])}>
                 [{log.level}]
               </span>
-              <span className="shrink-0 text-neon-purple">{log.source}</span>
+              <span className="shrink-0 text-gold">{log.source}</span>
               <span className="break-all text-foreground/90">{log.message}</span>
             </div>
           ))

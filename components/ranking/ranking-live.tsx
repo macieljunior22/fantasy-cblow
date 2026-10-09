@@ -57,8 +57,8 @@ export function RankingLive({ initial }: { initial: Row[] }) {
           <span
             className={
               live
-                ? "h-2 w-2 rounded-full bg-neon-green"
-                : "h-2 w-2 rounded-full bg-neon-yellow"
+                ? "h-2 w-2 rounded-full bg-live"
+                : "h-2 w-2 rounded-full bg-warn"
             }
           />
           {live ? "ao vivo" : "conectando…"}
@@ -76,9 +76,9 @@ export function RankingLive({ initial }: { initial: Row[] }) {
               <span
                 className={`w-8 text-center font-mono text-sm font-bold ${
                   index === 0
-                    ? "text-neon-yellow"
+                    ? "text-gold"
                     : index < 3
-                      ? "text-neon-green"
+                      ? "text-foreground/80"
                       : "text-muted"
                 }`}
               >
@@ -87,7 +87,7 @@ export function RankingLive({ initial }: { initial: Row[] }) {
               <span className="flex-1 truncate text-sm font-medium">
                 {row.nickname}
               </span>
-              <span className="font-mono text-sm font-bold text-neon-purple">
+              <span className="font-mono text-sm font-bold text-gold">
                 {row.pontos_totais} pts
               </span>
             </li>

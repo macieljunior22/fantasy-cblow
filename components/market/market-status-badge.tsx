@@ -33,10 +33,10 @@ export function MarketStatusBadge({ initial }: { initial: MarketSettings | null 
 
   return (
     <span
-      className={`tag ${isOpen ? "border-neon-green/50 text-neon-green" : "border-neon-yellow/50 text-neon-yellow"}`}
+      className={`tag ${isOpen ? "border-gold/50 text-gold" : "border-line text-muted"}`}
     >
       <span
-        className={`h-2 w-2 rounded-full ${isOpen ? "animate-pulse bg-neon-green" : "bg-neon-yellow"}`}
+        className={`h-2 w-2 rounded-full ${isOpen ? "animate-pulse bg-gold" : "bg-warn"}`}
       />
       {isOpen ? "Mercado aberto" : "Mercado travado"} · Rodada {rodada}
     </span>

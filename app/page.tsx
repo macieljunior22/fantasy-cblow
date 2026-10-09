@@ -45,7 +45,7 @@ export default function HomePage() {
 
         <h1 className="max-w-2xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
           Monte seu time do{" "}
-          <span className="text-neon-purple [text-shadow:0_0_24px_rgb(176_38_255/0.7)]">
+          <span className="text-gold [text-shadow:0_0_24px_rgb(216_189_142/0.45)]">
             CBLOW
           </span>{" "}
           e pontue com a performance real.
@@ -74,7 +74,7 @@ export default function HomePage() {
             ["∞", "Diversão"],
           ].map(([value, label]) => (
             <div key={label} className="panel py-3 text-center">
-              <dt className="text-2xl font-extrabold text-neon-green">{value}</dt>
+              <dt className="text-2xl font-extrabold text-gold">{value}</dt>
               <dd className="text-xs text-muted">{label}</dd>
             </div>
           ))}
