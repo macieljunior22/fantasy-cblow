@@ -37,48 +37,60 @@ function RankingFallback() {
 export default function HomePage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
-      {/* Hero */}
-      <section className="flex flex-col items-start gap-6 py-10 md:py-16">
-        <Suspense fallback={<BadgeFallback />}>
-          <MarketBadge />
-        </Suspense>
+      {/* Hero com a arena do CBLOW ao fundo (opacidade baixa + blur) */}
+      <section className="relative flex flex-col items-start gap-6 overflow-hidden rounded-2xl border border-line px-5 py-10 md:px-10 md:py-16">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/hero/arena.webp"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full scale-105 object-cover opacity-25 blur-[2px]"
+          draggable={false}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
 
-        <h1 className="max-w-2xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
-          Monte seu time do{" "}
-          <span className="text-gold [text-shadow:0_0_24px_rgb(216_189_142/0.45)]">
-            CBLOW
-          </span>{" "}
-          e pontue com a performance real.
-        </h1>
+        <div className="relative flex flex-col items-start gap-6">
+          <Suspense fallback={<BadgeFallback />}>
+            <MarketBadge />
+          </Suspense>
 
-        <p className="max-w-xl text-lg text-muted">
-          150 LOW Coins, 5 jogadores (Top, Jungle, Mid, ADC, Support) + um
-          Técnico. Kills, assists, objetivos e vitórias viram pontos — em tempo
-          real, direto do client do LoL.
-        </p>
+          <h1 className="max-w-2xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
+            Monte seu time do{" "}
+            <span className="text-gold [text-shadow:0_0_24px_rgb(216_189_142/0.45)]">
+              CBLOW
+            </span>{" "}
+            e pontue com a performance real.
+          </h1>
 
-        <div className="flex flex-wrap gap-3">
-          <Link href="/cadastro" className="btn-primary">
-            Começar agora
-          </Link>
-          <Link href="#ranking" className="btn-ghost">
-            Ver ranking
-          </Link>
+          <p className="max-w-xl text-lg text-muted">
+            150 LOW Coins, 5 jogadores (Top, Jungle, Mid, ADC, Support) + um
+            Técnico. Kills, assists, objetivos e vitórias viram pontos — em tempo
+            real, direto do client do LoL.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <Link href="/cadastro" className="btn-primary">
+              Começar agora
+            </Link>
+            <Link href="#ranking" className="btn-ghost">
+              Ver ranking
+            </Link>
+          </div>
+
+          <dl className="mt-4 grid w-full max-w-2xl grid-cols-2 gap-4 sm:grid-cols-4">
+            {[
+              ["150", "LOW Coins iniciais"],
+              ["+30", "Jogadores para escolher"],
+              ["+8", "Técnicos disponíveis"],
+              ["∞", "Diversão"],
+            ].map(([value, label]) => (
+              <div key={label} className="panel bg-background/60 py-3 text-center backdrop-blur-sm">
+                <dt className="text-2xl font-extrabold text-gold">{value}</dt>
+                <dd className="text-xs text-muted">{label}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-
-        <dl className="mt-4 grid w-full max-w-2xl grid-cols-2 gap-4 sm:grid-cols-4">
-          {[
-            ["100¢", "Cartoletas iniciais"],
-            ["6", "Jogadores no time"],
-            ["5", "Posições"],
-            ["∞", "Diversão"],
-          ].map(([value, label]) => (
-            <div key={label} className="panel py-3 text-center">
-              <dt className="text-2xl font-extrabold text-gold">{value}</dt>
-              <dd className="text-xs text-muted">{label}</dd>
-            </div>
-          ))}
-        </dl>
       </section>
 
       {/* Ranking ao vivo */}
