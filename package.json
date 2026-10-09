@@ -9,7 +9,8 @@
     "lint": "eslint",
     "capture": "node --env-file-if-exists=.env.local scripts/live-capture/main.mts",
     "seed:gen": "node --env-file-if-exists=.env.local scripts/generate-seed.mjs",
-    "db:sql": "node scripts/apply-sql.mjs"
+    "db:sql": "node scripts/apply-sql.mjs",
+    "user:create": "node --env-file-if-exists=.env.local scripts/create-user.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
