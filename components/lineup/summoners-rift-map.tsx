@@ -10,11 +10,11 @@ import type { Rota } from "@/types/database";
  * quadrante superior-central, MID no centro, ADC/SUP na parte inferior.
  */
 export const MAP_SLOTS: Record<Rota, { x: number; y: number }> = {
-  TOP: { x: 14, y: 20 },
-  JG: { x: 38, y: 33 },
+  TOP: { x: 18, y: 20 },
+  JG: { x: 33, y: 40 },
   MID: { x: 50, y: 47 },
-  ADC: { x: 51, y: 75 },
-  SUP: { x: 68, y: 62 },
+  ADC: { x: 62, y: 82 },
+  SUP: { x: 78, y: 82 },
 };
 
 /** Posição da bolinha do TÉCNICO: base inferior (onde começam os jogadores). */
