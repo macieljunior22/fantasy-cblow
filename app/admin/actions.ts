@@ -5,7 +5,14 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import type { LogLevel, MarketStatus, MatchStatus } from "@/types/database";
+import {
+  MATCH_TYPE_WEIGHT,
+  PRICE_BASE,
+  PRICE_K,
+  PRICE_SCALE,
+  PRICE_WINDOW,
+} from "@/lib/scoring";
+import type { LogLevel, MarketStatus, MatchStatus, MatchType } from "@/types/database";
 
 async function writeLog(level: LogLevel, message: string, payload?: object) {
   // best-effort: falha de log não deve derrubar a ação do admin
@@ -133,6 +140,7 @@ export async function setMatchWinner(matchId: string, winnerTeamId: string | nul
 /** Cria uma nova partida (confronto) numa rodada. */
 export async function createMatch(input: {
   rodada: number;
+  matchType?: MatchType;
   blueTeamId: string | null;
   redTeamId: string | null;
   scheduledAt?: string | null;
@@ -149,6 +157,7 @@ export async function createMatch(input: {
       rodada: input.rodada,
       blue_team_id: input.blueTeamId,
       red_team_id: input.redTeamId,
+    match_type: input.matchType ?? "OFICIAL",
       scheduled_at: input.scheduledAt ?? null,
       status: "NOT_STARTED",
     })
@@ -296,6 +305,123 @@ export async function adminSaveLineupForUser(input: {
     rodada,
   });
   revalidatePath("/admin");
+}
+
+export interface PricePreviewRow {
+  playerId: string;
+  nick: string;
+  rota: string;
+  precoAtual: number;
+  mediaJogador: number | null;
+  mediaRota: number | null;
+  precoNovo: number;
+  partidas: number;
+}
+
+function perMinute(pontos: number, minutos: number): number {
+  return pontos / Math.max(1, minutos);
+}
+
+/**
+ * Recalcula os precos a partir das partidas FINALIZADAS.
+ * TREINO pesa 0.5 e calibra sem pontuar; OFICIAL pesa 1.
+ * apply=false: so simula. apply=true: grava preco + historico.
+ */
+export async function recalculatePrices(apply: boolean): Promise<PricePreviewRow[]> {
+  await requireAdmin();
+  const supabase = createAdminClient();
+
+  const [{ data: players }, { data: matches }, { data: stats }] = await Promise.all([
+    supabase.from("players_cblow").select("id, nick, rota, preco"),
+    supabase.from("matches").select("id, status, match_type, game_time_seconds").eq("status", "FINISHED"),
+    supabase.from("matches_live_stats").select("match_id, player_id, pontos"),
+  ]);
+  if (!players) throw new Error("Falha ao ler jogadores.");
+
+  const matchById = new Map(
+    ((matches ?? []) as { id: string; match_type: MatchType | null; game_time_seconds: number }[]).map((m) => [m.id, m]),
+  );
+
+  const samples = new Map<string, { pontos: number; minutos: number; tipo: MatchType }[]>();
+  for (const s of (stats ?? []) as { match_id: string; player_id: string; pontos: number }[]) {
+    const m = matchById.get(s.match_id);
+    if (!m) continue;
+    const tipo: MatchType = m.match_type === "TREINO" ? "TREINO" : "OFICIAL";
+    const arr = samples.get(s.player_id) ?? [];
+    arr.push({ pontos: Number(s.pontos), minutos: Math.max(1, Math.round(m.game_time_seconds / 60)), tipo });
+    samples.set(s.player_id, arr);
+  }
+
+  const rotaSum = new Map<string, number>();
+  const rotaCount = new Map<string, number>();
+  const playerById = new Map(players.map((p) => [p.id, p]));
+  for (const [playerId, arr] of samples) {
+    const pl = playerById.get(playerId) as { rota: string } | undefined;
+    if (!pl) continue;
+    for (const s of arr) {
+      if (s.tipo !== "OFICIAL") continue;
+      rotaSum.set(pl.rota, (rotaSum.get(pl.rota) ?? 0) + perMinute(s.pontos, s.minutos));
+      rotaCount.set(pl.rota, (rotaCount.get(pl.rota) ?? 0) + 1);
+    }
+  }
+  const mediaRota = new Map<string, number>();
+  for (const [rota, sum] of rotaSum) {
+    mediaRota.set(rota, sum / Math.max(1, rotaCount.get(rota) ?? 1));
+  }
+
+  const rows: PricePreviewRow[] = [];
+  for (const p of players as { id: string; nick: string; rota: string; preco: number }[]) {
+    const arr = (samples.get(p.id) ?? []).slice(-PRICE_WINDOW);
+    let media: number | null = null;
+    if (arr.length > 0) {
+      let num = 0;
+      let den = 0;
+      for (const s of arr) {
+        const w = MATCH_TYPE_WEIGHT[s.tipo] ?? 1;
+        num += perMinute(s.pontos, s.minutos) * w;
+        den += w;
+      }
+      media = num / Math.max(1e-9, den);
+    }
+    const mRota = mediaRota.get(p.rota) ?? null;
+    const cfg = PRICE_BASE[p.rota] ?? { base: 10, min: 5, max: 16 };
+    let novo = cfg.base;
+    if (media !== null && mRota !== null) {
+      novo = Math.round(Math.min(cfg.max, Math.max(cfg.min, cfg.base + PRICE_K * ((media - mRota) / PRICE_SCALE))) * 100) / 100;
+    }
+    rows.push({
+      playerId: p.id,
+      nick: p.nick,
+      rota: p.rota,
+      precoAtual: Number(p.preco),
+      mediaJogador: media === null ? null : Math.round(media * 100) / 100,
+      mediaRota: mRota === null ? null : Math.round(mRota * 100) / 100,
+      precoNovo: novo,
+      partidas: arr.length,
+    });
+  }
+
+  rows.sort((a, b) => b.precoNovo - b.precoAtual - (a.precoNovo - a.precoAtual));
+
+  if (apply) {
+    const changed = rows.filter((r) => r.precoNovo !== r.precoAtual && r.partidas > 0);
+    for (const r of changed) {
+      const { error } = await supabase.from("players_cblow").update({ preco: r.precoNovo }).eq("id", r.playerId);
+      if (error) throw new Error("Falha ao aplicar preco de " + r.nick + ": " + error.message);
+      await supabase.from("player_price_history").insert({
+        player_id: r.playerId,
+        preco_antigo: r.precoAtual,
+        preco_novo: r.precoNovo,
+        motivo: "recalculo",
+      });
+    }
+    await writeLog("WARN", "Precos recalculados e aplicados (" + changed.length + " jogadores)");
+    revalidatePath("/admin");
+    revalidatePath("/mercado");
+    revalidatePath("/escalar");
+  }
+
+  return rows;
 }
 
 /** Exclui um usuário (conta de auth + profile em cascata) pela Admin API. */

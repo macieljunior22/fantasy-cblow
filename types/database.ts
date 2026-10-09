@@ -7,6 +7,7 @@
 export type MarketStatus = "OPEN" | "LOCKED";
 export type Rota = "TOP" | "JG" | "MID" | "ADC" | "SUP";
 export type MatchStatus = "NOT_STARTED" | "IN_PROGRESS" | "PAUSED" | "FINISHED";
+export type MatchType = "TREINO" | "OFICIAL";
 export type LineupStatus = "ACTIVE" | "LOCKED" | "FINISHED";
 export type LogLevel = "INFO" | "WARN" | "ERROR";
 
@@ -67,6 +68,7 @@ export interface Match {
   blue_team_id: string | null;
   red_team_id: string | null;
   status: MatchStatus;
+  match_type: MatchType | null;
   winner_team_id: string | null;
   game_time_seconds: number;
   scheduled_at: string | null;
@@ -122,6 +124,16 @@ export interface Lineup {
   status: LineupStatus;
   created_at: string;
   updated_at: string;
+}
+
+export interface PlayerPriceHistory {
+  id: string;
+  player_id: string;
+  match_id: string | null;
+  preco_antigo: number;
+  preco_novo: number;
+  motivo: string;
+  created_at: string;
 }
 
 export interface SystemLog {

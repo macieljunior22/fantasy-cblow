@@ -44,6 +44,7 @@ export function AdminControls({
   const [newRodada, setNewRodada] = useState(String(rodada));
   const [newBlue, setNewBlue] = useState<string>("");
   const [newRed, setNewRed] = useState<string>("");
+  const [newType, setNewType] = useState<"TREINO" | "OFICIAL">("OFICIAL");
 
   const teamNameById = Object.fromEntries(teams.map((t) => [t.id, t.nome]));
 
@@ -179,6 +180,16 @@ export function AdminControls({
               });
             }}
             className="btn-primary"
+          <select
+            value={newType}
+            onChange={(e) => setNewType(e.target.value as "TREINO" | "OFICIAL")}
+            disabled={pending}
+            className="input"
+            title="TREINO calibra preco sem pontuar; OFICIAL pontua"
+          >
+            <option value="OFICIAL">OFICIAL</option>
+            <option value="TREINO">TREINO</option>
+          </select>
           >
             Criar partida
           </button>
@@ -209,6 +220,16 @@ export function AdminControls({
                     </span>{" "}
                     <span className={cn("font-medium", STATUS_STYLE[match.status])}>
                       · {STATUS_LABEL[match.status]}
+                    </span>
+                    <span
+                      className={cn(
+                        "tag",
+                        (match.match_type ?? "OFICIAL") === "TREINO"
+                          ? "border-warn/50 text-warn"
+                          : "border-gold/50 text-gold",
+                      )}
+                    >
+                      {(match.match_type ?? "OFICIAL") === "TREINO" ? "TREINO" : "OFICIAL"}
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-2">

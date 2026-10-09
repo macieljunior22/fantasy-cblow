@@ -6,6 +6,7 @@ import { AdminControls } from "@/components/admin/admin-controls";
 import { EscalateForUser } from "@/components/admin/escalate-for-user";
 import { LogsConsole } from "@/components/admin/logs-console";
 import { PointsOverride } from "@/components/admin/points-override";
+import { PricingPanel } from "@/components/admin/pricing-panel";
 import { UsersManager } from "@/components/admin/users-manager";
 import { getSessionProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -82,6 +83,8 @@ async function AdminDashboard() {
         playerStats={playerStats}
         teamStats={teamStats}
       />
+
+      <PricingPanel />
 
       <EscalateForUser
         users={profiles}

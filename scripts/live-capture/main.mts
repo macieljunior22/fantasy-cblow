@@ -65,6 +65,8 @@ interface LivePlayer {
   riotIdGameName?: string;
   riotIdTagLine?: string;
   summonerName?: string;
+  /** PUUID exposto pela Live Client API (preenchido no banco na 1ª captura). */
+  puuid?: string;
   team?: "ORDER" | "CHAOS";
   scores?: LivePlayerScore;
 }
@@ -87,12 +89,14 @@ interface DbPlayer {
   tag_line: string;
   rota: string;
   team_id: string | null;
+  puuid: string | null;
 }
 
 interface DbMatch {
   id: string;
   rodada: number;
   status: string;
+  match_type: string | null;
   blue_team_id: string | null; // ORDER
   red_team_id: string | null; // CHAOS
 }
@@ -314,6 +318,11 @@ async function pushStats(match: DbMatch, live: LiveClientData) {
         }`,
       );
       continue;
+    }
+    const dbpRec = dbp;
+    if (lp.puuid && !dbpRec.puuid) {
+      dbpRec.puuid = lp.puuid;
+      void db.from("players_cblow").update({ puuid: lp.puuid }).eq("id", dbpRec.id);
     }
     const s = lp.scores ?? {};
     const raw = {
